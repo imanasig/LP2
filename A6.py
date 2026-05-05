@@ -1,3 +1,11 @@
+# Implement any one of the following Expert System
+# I. Information management
+# II. Hospitals and medical facilities
+# III. Help desks management
+# IV. Employee performance evaluation
+# V. Stock market trading
+# VI. Airline scheduling and cargo schedules
+
 # I. Information Management Expert System
 def information_system():
 
