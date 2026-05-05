@@ -1,3 +1,4 @@
+#Implement depth first search algorithm and Breadth First Search algorithm, Use an undirected graph and develop a recursive algorithm for searching all the vertices of a graph or tree data structure.
 from collections import deque
 
 def add_edge(graph, u, v):
