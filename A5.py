@@ -1,3 +1,5 @@
+#Develop an elementary chatbot for any suitable customer interaction application.
+
 def chatbot():
 
     print(" Welcome to SmartShop Assistant!")
