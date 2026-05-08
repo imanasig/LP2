@@ -1,4 +1,4 @@
-#Implement A star Algorithm for any game search problem.
+# Using Python, implement A* algorithm for 8-puzzle problem.
 goal_state = [
     [1, 2, 3],
     [4, 5, 6],
