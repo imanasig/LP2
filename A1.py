@@ -1,10 +1,15 @@
-#Implement depth first search algorithm and Breadth First Search algorithm, Use an undirected graph and develop a recursive algorithm for searching all the vertices of a graph or tree data structure.
+# Implement depth first search algorithm and Breadth First Search algorithm.
+# Use an undirected graph and develop a recursive algorithm
+# for searching all the vertices of a graph or tree data structure.
+
 from collections import deque
 
+# Function to add edge in undirected graph
 def add_edge(graph, u, v):
     graph[u].append(v)
     graph[v].append(u)
-    
+
+    # Sort for consistent traversal
     graph[u].sort()
     graph[v].sort()
 
@@ -17,11 +22,11 @@ def dfs_recursive(graph, current, visited, traversal):
         if neighbor not in visited:
             dfs_recursive(graph, neighbor, visited, traversal)
 
-# DFS Search with Path
+# DFS Search with Recursive Path Tracking
 def dfs_search(graph, current, target, visited, path):
     visited.add(current)
     path.append(current)
-
+    # Target found
     if current == target:
         return True
 
@@ -29,54 +34,56 @@ def dfs_search(graph, current, target, visited, path):
         if neighbor not in visited:
             if dfs_search(graph, neighbor, target, visited, path):
                 return True
+    # Backtracking
+    path.pop()
 
-    path.pop() 
     return False
 
-# BFS Traversal
-def bfs_traversal(graph, start):
-    visited = set()
-    queue = deque([start])
-    traversal = []
+# BFS Traversal (Recursive)
+def bfs_recursive(graph, queue, visited, traversal):
+    if not queue:
+        return
+    # Remove first node
+    node = queue.popleft()
+    traversal.append(node)
 
-    visited.add(start)
+    # Visit neighbors
+    for neighbor in graph[node]:
+        if neighbor not in visited:
+            visited.add(neighbor)
+            queue.append(neighbor)
 
-    while queue:
-        node = queue.popleft()
-        traversal.append(node)
+    bfs_recursive(graph, queue, visited, traversal)
 
-        for neighbor in graph[node]:
-            if neighbor not in visited:
-                visited.add(neighbor)
-                queue.append(neighbor)
+# BFS Search with Recursive Path Tracking
+def bfs_search_recursive(graph, queue, visited, target):
+    if not queue:
+        return None
 
-    return traversal
+    # Remove node and path
+    node, path = queue.popleft()
 
-# BFS Search with Path
-def bfs_search(graph, start, target):
-    visited = set()
-    queue = deque([(start, [start])])
+    # Target found
+    if node == target:
+        return path
 
-    visited.add(start)
+    # Visit neighbors
+    for neighbor in graph[node]:
+        if neighbor not in visited:
+            visited.add(neighbor)
+            queue.append(
+                (neighbor, path + [neighbor])
+            )
 
-    while queue:
-        node, path = queue.popleft()
+    return bfs_search_recursive(graph, queue, visited, target)
 
-        if node == target:
-            return path
-
-        for neighbor in graph[node]:
-            if neighbor not in visited:
-                visited.add(neighbor)
-                queue.append((neighbor, path + [neighbor]))
-
-    return None
-
+# MAIN PROGRAM
 n = int(input("Enter number of vertices: "))
 
 graph = {i: [] for i in range(n)}
 
 e = int(input("Enter number of edges: "))
+
 print("Enter edges (u v):")
 
 for _ in range(e):
@@ -88,27 +95,53 @@ start = int(input("Enter starting vertex: "))
 # DFS Traversal
 visited = set()
 dfs_result = []
+
 dfs_recursive(graph, start, visited, dfs_result)
-print("\nDFS Traversal:", " -> ".join(map(str, dfs_result)))
 
-# BFS Traversal
-bfs_result = bfs_traversal(graph, start)
-print("BFS Traversal:", " -> ".join(map(str, bfs_result)))
+print("\nDFS Traversal:",
+      " -> ".join(map(str, dfs_result)))
 
-# Search node
+# BFS Traversal (Recursive)
+visited = set()
+visited.add(start)
+
+queue = deque([start])
+
+bfs_result = []
+
+bfs_recursive(graph, queue, visited, bfs_result)
+
+print("BFS Traversal:",
+      " -> ".join(map(str, bfs_result)))
+
+# Search Node
 target = int(input("\nEnter node to search: "))
 
-# DFS Path
+# DFS Search Path
 visited = set()
 dfs_path = []
+
 if dfs_search(graph, start, target, visited, dfs_path):
-    print("DFS Path:", " -> ".join(map(str, dfs_path)))
+    print("DFS Path:",
+          " -> ".join(map(str, dfs_path)))
 else:
     print("Node not found using DFS")
 
-# BFS Path
-bfs_path = bfs_search(graph, start, target)
+# BFS Search Path (Recursive)
+visited = set()
+visited.add(start)
+
+queue = deque([(start, [start])])
+
+bfs_path = bfs_search_recursive(
+    graph,
+    queue,
+    visited,
+    target
+)
+
 if bfs_path is not None:
-    print("BFS Path:", " -> ".join(map(str, bfs_path)))
+    print("BFS Path:",
+          " -> ".join(map(str, bfs_path)))
 else:
     print("Node not found using BFS")
